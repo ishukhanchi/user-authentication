@@ -1,12 +1,14 @@
-var http = require('http');
-var hostname = '127.0.0.1';
-var dt = require("./index.html") 
-http.createServer(dt,function(req, res) {
-  if(req.username==="username"&&req.password==="password"){
-      res.send('Info submitted successfully');//user is authorised
-    }
-  else{
-    res.send('Recheck username and password');//user is not authorised
-  }
-}).listen(8080);
+var http = require('http'),
+    fs = require('fs');
 
+
+fs.readFile('./index.html', function (error, html) {
+    if (error) {
+        throw error; 
+    }       
+    http.createServer(function(request, response) {  
+        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        response.end();  
+    }).listen(8080);
+});
