@@ -1,14 +1,26 @@
-var http = require('http'),
-    fs = require('fs');
+var http = require('http');
+var fs = require('fs');
 
-
-fs.readFile('./index.html', function (error, html) {
-    if (error) {
-        throw error; 
-    }       
-    http.createServer(function(request, response) {  
-        response.writeHeader(200, {"Content-Type": "text/html"});  
-        response.write(html);  
-        response.end();  
-    }).listen(8080);
+var server = http.createServer(function (request, response) {
+    
+    if (request.url="/submit") {
+        fs.readFile("./index.html", function (error, pgResp) {
+            if (error) {
+                response.writeHead(404);
+                response.write('Contents you are looking are Not Found');
+            } else {
+                response.writeHead(200, { 'Content-Type': 'text/html' });
+                response.write(pgResp);
+            } 
+            response.end();
+        });
+        if(request.username==="username"&&request.password==="password"){
+        	console.log('user is authenticated');
+        }
+        else{
+        	console.log('user is not authenticated');
+        }
+    } 
 });
+server.listen(8080);
+console.log('Server listening on port 8080');
